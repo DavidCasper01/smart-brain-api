@@ -3,24 +3,27 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const knex = require('knex');
+const morgan = require('morgan');
 
 const register = require('./controllers/register');
 const signin = require('./controllers/signin');
 const profile = require('./controllers/profile');
 const image = require('./controllers/image');
-
+console.log(process.env.POSTGRES_USER)
 const db = knex({
   client: 'pg',
+  //'127.0.0.1' equivalent to localhost
   connection: {
-    host : '127.0.0.1',
-    user : 'aneagoie',
-    password : '',
-    database : 'smart-brain'
+    host : process.env.POSTGRES_HOST,
+    user : process.env.POSTGRES_USER,
+    password : process.env.POSTGRES_PASSWORD,
+    database : process.env.POSTGRES_DB
   }
 });
 
 const app = express();
 
+app.use(morgan('combined'));
 app.use(cors())
 app.use(bodyParser.json());
 
